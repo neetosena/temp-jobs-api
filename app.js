@@ -29,6 +29,10 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.set("trust proxy", 1 /* number of proxies between user and server */);
 
+app.use(express.json());
+app.use(helmet());
+app.use(cors());
+app.use(xss());
 app.use(
   rateLimiter({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -38,13 +42,9 @@ app.use(
     // store: ... , // Use an external store for consistency across multiple server instances.
   })
 );
-app.use(express.json());
-app.use(helmet());
-app.use(cors());
-app.use(xss());
 // extra packages
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("<h1>Jobs API</h1><a href='/api-docs'>Documentation</a>");
 });
 
